@@ -42,6 +42,8 @@ export class GameScene extends Phaser.Scene {
 
         const burger: string[] = [];
 
+        const burgerImages: Phaser.GameObjects.Image[] = [];
+
         const order = ["bottom-bun", "meat"]
 
         let score = 0;
@@ -57,11 +59,19 @@ export class GameScene extends Phaser.Scene {
             ingredientImage.setInteractive();
 
             ingredientImage.on("pointerdown", () => {
-                ingredientImage.disableInteractive();
 
                 const targetY = burgerStartY - (burger.length * layerGap);
 
+                // Tıklanan malzemenin bir kopyasını oluştur
+                const ingredientCopy = this.add.image(
+                    ingredientImage.x,
+                    ingredientImage.y,
+                    ingredientName
+                );
+                ingredientCopy.setScale(ingredientImage.scaleX, ingredientImage.scaleY);
+
                 burger.push(ingredientName);
+                burgerImages.push(ingredientCopy);
 
                 this.tweens.add({
                     targets: ingredientImage,
@@ -71,6 +81,16 @@ export class GameScene extends Phaser.Scene {
                 });
             })
         }
+
+        const resetBurger = () => {
+
+            burgerImages.forEach((image) => {
+                image.destroy();
+            });
+
+            burger.length = 0;
+            burgerImages.length = 0;
+        };
 
         const isOrderCorrect = () => {
             if (burger.length !== order.length) {
@@ -177,6 +197,8 @@ export class GameScene extends Phaser.Scene {
 
                 resultText.setText("WRONG! -25");
             }
+
+            resetBurger();
         })
 
         // Butom bun
