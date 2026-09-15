@@ -1,26 +1,17 @@
 import Phaser from "phaser";
+import { GameScene } from "./scenes/GameScene";
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
 
-    width: 1280,
-    height: 720,
+    width: 960,
+    height: 540,
 
-    backgroundColor: "#87CEEB",
+    backgroundColor: "#1d2638",
 
-    scene: {
-        create() {
-            this.add.text(
-                640,
-                360,
-                "Yumiverse 🍔",
-                {
-                    fontSize: "64px",
-                    color: "#ffffff"
-                }
-            ).setOrigin(0.5);
-        }
-    }
+    pixelArt: true,
+
+    scene: GameScene,
 };
 
 new Phaser.Game(config);
