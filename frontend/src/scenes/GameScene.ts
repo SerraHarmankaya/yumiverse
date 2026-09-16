@@ -4,7 +4,8 @@ type Ingredient =
     | "bottom-bun"
     | "meat"
     | "lettuce"
-    | "top-bun";
+    | "top-bun"
+    | "tomato";
 
 export class GameScene extends Phaser.Scene {
 
@@ -36,6 +37,11 @@ export class GameScene extends Phaser.Scene {
         this.load.image(
             "top-bun",
             "/assets/food/top-bun.png"
+        );
+
+        this.load.image(
+            "tomato",
+            "/assets/food/tomato.png"
         );
 
         this.load.image(
@@ -81,7 +87,7 @@ export class GameScene extends Phaser.Scene {
                 burgerImages.push(ingredientCopy);
 
                 this.tweens.add({
-                    targets: ingredientImage,
+                    targets: ingredientCopy,
                     x: burgerX,
                     y: targetY,
                     duration: 500
@@ -116,7 +122,7 @@ export class GameScene extends Phaser.Scene {
             orderImages.length = 0;
             order = ["bottom-bun"];
 
-            const ingredients: Ingredient[] = ["meat", "lettuce"];
+            const ingredients: Ingredient[] = ["meat", "lettuce", "tomato"];
 
             const ingredientCount = Phaser.Math.Between(1, 3);
 
@@ -263,6 +269,15 @@ export class GameScene extends Phaser.Scene {
         );
         lettuce.setScale(0.07);
 
+        // tomato
+        const tomato = this.add.image(
+            280,
+            400,
+            "tomato"
+        );
+
+        tomato.setScale(0.075);
+
         // Bun
         const topBun = this.add.image(
             150,
@@ -275,6 +290,7 @@ export class GameScene extends Phaser.Scene {
         addIngredient("bottom-bun", bottomBun);
         addIngredient("meat", meat);
         addIngredient("lettuce", lettuce);
+        addIngredient("tomato", tomato);
         addIngredient("top-bun", topBun);
     }
 }
