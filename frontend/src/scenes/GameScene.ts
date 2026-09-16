@@ -49,6 +49,7 @@ export class GameScene extends Phaser.Scene {
         const burger: Ingredient[] = [];
 
         const burgerImages: Phaser.GameObjects.Image[] = [];
+        const orderImages: Phaser.GameObjects.Image[] = [];
 
         let order: Ingredient[] = [];
 
@@ -106,17 +107,13 @@ export class GameScene extends Phaser.Scene {
             0xffffff
         );
 
-        const orderText = this.add.text(
-            680,
-            90,
-            "",
-            {
-                fontSize: "20px",
-                color: "#000000"
-            }
-        );
-
         const generateOrder = () => {
+            // Clean up previous order images
+            orderImages.forEach((image) => {
+                image.destroy();
+            });
+
+            orderImages.length = 0;
             order = ["bottom-bun"];
 
             const ingredients: Ingredient[] = ["meat", "lettuce"];
@@ -132,7 +129,19 @@ export class GameScene extends Phaser.Scene {
 
             order.push("top-bun");
 
-            orderText.setText(order.join("\n"));
+            order.forEach((ingredient, index) => {
+                const image = this.add.image(
+                    780,
+                    190 - (index * 20),
+                    ingredient
+                );
+                if (ingredient === "lettuce") {
+                    image.setScale(0.07);
+                } else {
+                    image.setScale(0.1);
+                }
+                orderImages.push(image);
+            })
         }
 
         generateOrder();
