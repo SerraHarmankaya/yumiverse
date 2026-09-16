@@ -1,5 +1,11 @@
 import Phaser from "phaser";
 
+type Ingredient =
+    | "bottom-bun"
+    | "meat"
+    | "lettuce"
+    | "top-bun";
+
 export class GameScene extends Phaser.Scene {
 
     constructor() {
@@ -28,8 +34,8 @@ export class GameScene extends Phaser.Scene {
         );
 
         this.load.image(
-            "bun",
-            "/assets/food/bun.png"
+            "top-bun",
+            "/assets/food/top-bun.png"
         );
 
         this.load.image(
@@ -40,11 +46,11 @@ export class GameScene extends Phaser.Scene {
 
     create() {
 
-        const burger: string[] = [];
+        const burger: Ingredient[] = [];
 
         const burgerImages: Phaser.GameObjects.Image[] = [];
 
-        const order = ["bottom-bun", "meat"]
+        let order: Ingredient[] = [];
 
         let score = 0;
 
@@ -53,7 +59,7 @@ export class GameScene extends Phaser.Scene {
         const layerGap = 20;
 
         const addIngredient = (
-            ingredientName: string,
+            ingredientName: Ingredient,
             ingredientImage: Phaser.GameObjects.Image
         )=>{
             ingredientImage.setInteractive();
@@ -92,6 +98,45 @@ export class GameScene extends Phaser.Scene {
             burgerImages.length = 0;
         };
 
+        this.add.rectangle(
+            780,
+            100,
+            280,
+            140,
+            0xffffff
+        );
+
+        const orderText = this.add.text(
+            680,
+            90,
+            "",
+            {
+                fontSize: "20px",
+                color: "#000000"
+            }
+        );
+
+        const generateOrder = () => {
+            order = ["bottom-bun"];
+
+            const ingredients: Ingredient[] = ["meat", "lettuce"];
+
+            const ingredientCount = Phaser.Math.Between(1, 3);
+
+            for (let i = 0; i < ingredientCount; i++) {
+
+                const randomIngredient = Phaser.Utils.Array.GetRandom(ingredients)
+
+                order.push(randomIngredient)
+            }
+
+            order.push("top-bun");
+
+            orderText.setText(order.join("\n"));
+        }
+
+        generateOrder();
+
         const isOrderCorrect = () => {
             if (burger.length !== order.length) {
                 return false;
@@ -106,30 +151,12 @@ export class GameScene extends Phaser.Scene {
             return true;
         }
 
-        this.add.rectangle(
-            780,
-            100,
-            280,
-            140,
-            0xffffff
-        );
-
         this.add.text(
             680,
             50,
             "ORDER",
             {
                 fontSize: "24px",
-                color: "#000000"
-            }
-        );
-
-        this.add.text(
-            680,
-            90,
-            "Bottom Bun\nMeat",
-            {
-                fontSize: "20px",
                 color: "#000000"
             }
         );
@@ -199,6 +226,8 @@ export class GameScene extends Phaser.Scene {
             }
 
             resetBurger();
+
+            generateOrder();
         })
 
         // Butom bun
@@ -212,7 +241,7 @@ export class GameScene extends Phaser.Scene {
         // Meat
         const meat = this.add.image(
             150,
-            300,
+            250,
             "meat"
         );
         meat.setScale(0.1);
@@ -220,32 +249,23 @@ export class GameScene extends Phaser.Scene {
         // Lettuce
         const lettuce = this.add.image(
             150,
-            450,
+            350,
             "lettuce"
         );
         lettuce.setScale(0.07);
 
-        // Tomato
-        const tomato = this.add.image(
-            150,
-            600,
-            "tomato"
-        );
-        tomato.setScale(0.1);
-
         // Bun
-        const bun = this.add.image(
+        const topBun = this.add.image(
             150,
-            750,
-            "bun"
+            450,
+            "top-bun"
         );
-        bun.setScale(0.1);
+        topBun.setScale(0.1);
 
         // Malzemeleri aktif et
         addIngredient("bottom-bun", bottomBun);
         addIngredient("meat", meat);
         addIngredient("lettuce", lettuce);
-        addIngredient("tomato", tomato);
-        addIngredient("bun", bun);
+        addIngredient("top-bun", topBun);
     }
 }
