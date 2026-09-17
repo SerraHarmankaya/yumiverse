@@ -7,6 +7,46 @@ type Ingredient =
     | "top-bun"
     | "tomato";
 
+interface IngredientConfig {
+    name: Ingredient;
+    texture: string;
+    path: string;
+    scale: number;
+}
+
+const ingredientConfigs: IngredientConfig[] = [
+    {
+        name: "bottom-bun",
+        texture: "bottom-bun",
+        path: "/assets/food/bottom-bun.png",
+        scale: 0.1
+    },
+    {
+        name: "meat",
+        texture: "meat",
+        path: "/assets/food/meat.png",
+        scale: 0.1
+    },
+    {
+        name: "lettuce",
+        texture: "lettuce",
+        path: "/assets/food/lettuce.png",
+        scale: 0.07
+    },
+    {
+        name: "tomato",
+        texture: "tomato",
+        path: "/assets/food/tomato.png",
+        scale: 0.09
+    },
+    {
+        name: "top-bun",
+        texture: "top-bun",
+        path: "/assets/food/top-bun.png",
+        scale: 0.1
+    }
+];
+
 export class GameScene extends Phaser.Scene {
 
     constructor() {
@@ -14,40 +54,12 @@ export class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image(
-            "bottom-bun",
-            "/assets/food/bottom-bun.png"
-        );
-
-        this.load.image(
-            "meat",
-            "/assets/food/meat.png"
-        );
-
-        this.load.image(
-            "lettuce",
-            "/assets/food/lettuce.png"
-        );
-
-        this.load.image(
-            "tomato",
-            "/assets/food/tomato.png"
-        );
-
-        this.load.image(
-            "top-bun",
-            "/assets/food/top-bun.png"
-        );
-
-        this.load.image(
-            "tomato",
-            "/assets/food/tomato.png"
-        );
-
-        this.load.image(
-            "plate",
-            "/assets/food/plate.png"
-        );
+        ingredientConfigs.forEach((ingredient) => {
+            this.load.image(
+                ingredient.texture,
+                ingredient.path
+            );
+        });
     }
 
     create() {
@@ -245,52 +257,23 @@ export class GameScene extends Phaser.Scene {
             generateOrder();
         })
 
-        // Butom bun
-        const bottomBun = this.add.image(
-            150,
-            150,
-            "bottom-bun"
-        );
-        bottomBun.setScale(0.1);
-
-        // Meat
-        const meat = this.add.image(
-            150,
-            250,
-            "meat"
-        );
-        meat.setScale(0.1);
-
-        // Lettuce
-        const lettuce = this.add.image(
-            150,
-            350,
-            "lettuce"
-        );
-        lettuce.setScale(0.07);
-
-        // tomato
-        const tomato = this.add.image(
-            280,
-            400,
-            "tomato"
-        );
-
-        tomato.setScale(0.075);
-
-        // Bun
-        const topBun = this.add.image(
-            150,
-            450,
-            "top-bun"
-        );
-        topBun.setScale(0.1);
-
         // Malzemeleri aktif et
-        addIngredient("bottom-bun", bottomBun);
-        addIngredient("meat", meat);
-        addIngredient("lettuce", lettuce);
-        addIngredient("tomato", tomato);
-        addIngredient("top-bun", topBun);
+        ingredientConfigs.forEach((ingredient, index) => {
+
+            const ingredientImage = this.add.image(
+                150,
+                120 + (index * 80),
+                ingredient.texture
+            );
+
+            ingredientImage.setScale(
+                ingredient.scale
+            );
+
+            addIngredient(
+                ingredient.name,
+                ingredientImage
+            );
+        });
     }
 }
