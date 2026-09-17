@@ -5,7 +5,8 @@ type Ingredient =
     | "meat"
     | "lettuce"
     | "top-bun"
-    | "tomato";
+    | "tomato"
+    | "cheese";
 
 interface IngredientConfig {
     name: Ingredient;
@@ -44,6 +45,12 @@ const ingredientConfigs: IngredientConfig[] = [
         texture: "top-bun",
         path: "/assets/food/top-bun.png",
         scale: 0.1
+    },
+    {
+        name: "cheese",
+        texture: "cheese",
+        path: "/assets/food/cheese.png",
+        scale: 0.07
     }
 ];
 
@@ -60,6 +67,11 @@ export class GameScene extends Phaser.Scene {
                 ingredient.path
             );
         });
+
+        this.load.image(
+            "plate",
+            "/assets/food/plate.png"
+        );
     }
 
     create() {
@@ -134,7 +146,7 @@ export class GameScene extends Phaser.Scene {
             orderImages.length = 0;
             order = ["bottom-bun"];
 
-            const ingredients: Ingredient[] = ["meat", "lettuce", "tomato"];
+            const ingredients: Ingredient[] = ["meat", "lettuce", "tomato", "cheese"];
 
             const ingredientCount = Phaser.Math.Between(1, 3);
 
